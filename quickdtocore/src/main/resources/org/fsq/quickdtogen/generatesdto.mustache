@@ -1,0 +1,31 @@
+package {{packageName}};
+
+import javax.annotation.processing.Generated;
+
+/**
+*   Dto for {@link {{sourceClassName}} }.
+*/
+@Generated(
+    value = "{{targetClassName}}",
+    date = "{{genDate}}",
+    comments = "{{comments}}"
+)
+public final class {{targetClassName}} {
+
+    {{#items}}
+    private {{value.type}} {{value.fieldName}};
+    {{/items}}
+
+    private {{targetClassName}}() {}
+
+    {{#items}}
+    public {{value.type}} {{value.getter}}() {
+        return this.{{value.fieldName}};
+    }
+
+    public void {{value.setter}}({{value.type}} {{value.fieldName}}) {
+        this.{{value.fieldName}} = {{value.fieldName}};
+    }
+    {{/items}}
+
+}
