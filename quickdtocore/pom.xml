@@ -7,7 +7,7 @@
         <groupId>org.fsq</groupId>
         <version>1.1</version>
     </parent>
-    <artifactId>quickdto</artifactId>
+    <artifactId>quickdtocore</artifactId>
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
