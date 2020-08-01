@@ -16,7 +16,7 @@ public final class {{targetClassName}} {
     private {{value.type}} {{value.fieldName}};
     {{/items}}
 
-    private {{targetClassName}}() {}
+    public {{targetClassName}}() {}
 
     {{#items}}
     public {{value.type}} {{value.getter}}() {
