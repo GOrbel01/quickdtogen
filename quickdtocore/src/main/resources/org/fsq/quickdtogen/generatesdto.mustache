@@ -13,17 +13,17 @@ import javax.annotation.processing.Generated;
 public final class {{targetClassName}} {
 
     {{#items}}
-    private {{value.type}} {{value.fieldName}};
+    private {{{value.type}}} {{value.fieldName}};
     {{/items}}
 
     public {{targetClassName}}() {}
 
     {{#items}}
-    public {{value.type}} {{value.getter}}() {
+    public {{{value.type}}} {{value.getter}}() {
         return this.{{value.fieldName}};
     }
 
-    public void {{value.setter}}({{value.type}} {{value.fieldName}}) {
+    public void {{value.setter}}({{{value.type}}} {{value.fieldName}}) {
         this.{{value.fieldName}} = {{value.fieldName}};
     }
     {{/items}}

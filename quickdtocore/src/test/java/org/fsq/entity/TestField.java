@@ -1,4 +1,4 @@
-package org.fsq.entity.test;
+package org.fsq.entity;
 
 public class TestField {
     private String testStr;

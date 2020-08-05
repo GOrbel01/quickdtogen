@@ -1,6 +1,8 @@
-package org.fsq.entity.test;
+package org.fsq.entity;
 
 import org.fsq.processor.GeneratesDto;
+
+import java.util.List;
 
 @GeneratesDto
 public class TestEntity {
@@ -8,6 +10,7 @@ public class TestEntity {
     private Integer testNumber;
     private String randomFieldNameA;
     private TestField testField;
+    private List<String> list;
 
     public TestEntity() {
 
@@ -43,5 +46,13 @@ public class TestEntity {
 
     public void setTestField(TestField testField) {
         this.testField = testField;
+    }
+
+    public List<String> getList() {
+        return list;
+    }
+
+    public void setList(List<String> list) {
+        this.list = list;
     }
 }

@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SupportedAnnotationTypes("org.fsq.processor.GeneratesDto")
-@SupportedSourceVersion(SourceVersion.RELEASE_10)
+@SupportedSourceVersion(SourceVersion.RELEASE_9)
 public class GeneratesDtoProcessor extends AbstractProcessor {
     private static final String TEMPLATE = "org/fsq/quickdtogen/generatesdto.mustache";
     private static final String COMMENT = "Generated using quickdtogen by FinalSquall";
@@ -121,7 +121,8 @@ public class GeneratesDtoProcessor extends AbstractProcessor {
         sb.append(type);
         sb.append(item.substring(0, 1).toUpperCase());
         sb.append(item.substring(1));
-        return sb.toString();
+        String res = sb.toString();
+        return res;
     }
 
     private List<Element> getEntityFields(TypeElement typeElement) {

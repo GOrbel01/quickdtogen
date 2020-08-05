@@ -2,7 +2,10 @@ package org.fsq.processor;
 
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.CompilationSubject;
+import com.google.testing.compile.Compiler;
 import com.google.testing.compile.JavaFileObjects;
+import org.fsq.processor.GeneratesDtoProcessor;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +14,9 @@ import javax.tools.JavaFileObject;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -27,7 +32,7 @@ public class TestGeneratesDtoProcessor {
 
     private static final String INDENT = "    ";
 
-    private static final String GEN_PATH = "target/generated-test-sources/test-annotations/org/fsq/entity/test/TestEntityDto.java";
+    private static final String GEN_PATH = "target/generated-test-sources/test-annotations/org/fsq/entity/TestEntityDto.java";
 
     private File sourceFile;
     private File generatedFile;
@@ -36,7 +41,7 @@ public class TestGeneratesDtoProcessor {
 
     @Before
     public void setup() {
-        sourceFile = new File("src/test/java/org/fsq/entity/test/TestEntity.java");
+        sourceFile = new File("src/test/java/org/fsq/entity/TestEntity.java");
         generatedFile = new File(GEN_PATH);
         if (generatedFile.exists()) {
             generatedFile.delete();
@@ -47,11 +52,10 @@ public class TestGeneratesDtoProcessor {
     @Test
     public void testGeneratesDtoProcessor() throws MalformedURLException, IOException {
         generatesDtoProcessor = new GeneratesDtoProcessor();
-
         JavaFileObject testEntityFile = JavaFileObjects.forResource(sourceFile.toURI().toURL());
 
         Compilation compilation =
-                javac()
+                Compiler.javac()
                         .withProcessors(generatesDtoProcessor)
                         .compile(testEntityFile);
         CompilationSubject.assertThat(compilation).succeeded();
@@ -64,11 +68,11 @@ public class TestGeneratesDtoProcessor {
             String line = sc.nextLine();
             System.out.println(lineNum + ": " + line);
             if (mapKeys.contains(lineNum)) {
-                assertEquals(expectedSourceLines.get(lineNum), line);
+                Assert.assertEquals(expectedSourceLines.get(lineNum), line);
             }
             lineNum++;
         }
-        assertTrue(sourceFile.exists());
+        Assert.assertTrue(sourceFile.exists());
     }
 
     /*
@@ -87,15 +91,16 @@ public class TestGeneratesDtoProcessor {
      */
     private Map<Integer, String> buildExpectedSourceLinesMap() {
         Map<Integer, String> map = new HashMap<>();
-        map.put(1, "package org.fsq.entity.test;");
+        map.put(1, "package org.fsq.entity;");
         map.put(3, "import javax.annotation.processing.Generated;");
         map.put(13, "public final class TestEntityDto {");
         map.put(16, indentLine("private java.lang.Integer testNumber;", 1));
-        map.put(18, indentLine("private org.fsq.entity.test.TestField testField;", 1));
-        map.put(22, indentLine("public java.lang.String getTestName() {", 1));
-        map.put(23, indentLine("return this.testName;", 2));
-        map.put(24, indentLine("}", 1));
-        map.put(51, "}");
+        map.put(18, indentLine("private org.fsq.entity.TestField testField;", 1));
+        map.put(23, indentLine("public java.lang.String getTestName() {", 1));
+        map.put(24, indentLine("return this.testName;", 2));
+        map.put(25, indentLine("}", 1));
+        map.put(51, indentLine("public java.util.List<java.lang.String> getList() {", 1));
+        map.put(59, "}");
         return map;
     }
 }
