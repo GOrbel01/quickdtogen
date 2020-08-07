@@ -1,6 +1,7 @@
 package org.fsq;
 
-import org.fsq.processor.GeneratesDto;
+import org.fsq.annotation.GeneratesDto;
+import org.fsq.annotation.ReferencesDto;
 import org.fsq.randompackage.ExtraField;
 
 import java.util.List;
@@ -12,6 +13,9 @@ public class Car {
     private Integer milesCovered;
     private ExtraField extraField;
     private List<String> testList;
+//    @ReferencesDto(otherDto = "org.fsq.manual.dto")
+    @ReferencesDto
+    private RandomEntity randomEntity;
 
     public String getCarName() {
         return carName;

@@ -3,8 +3,11 @@ package org.fsq.processor;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import org.fsq.annotation.GeneratesDto;
+import org.fsq.annotation.ReferencesDto;
 import org.fsq.model.DtoGenModel;
 import org.fsq.model.GenItem;
+import org.fsq.util.StringUtil;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -29,7 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@SupportedAnnotationTypes("org.fsq.processor.GeneratesDto")
+@SupportedAnnotationTypes("org.fsq.annotation.GeneratesDto")
 @SupportedSourceVersion(SourceVersion.RELEASE_9)
 public class GeneratesDtoProcessor extends AbstractProcessor {
     private static final String TEMPLATE = "org/fsq/quickdtogen/generatesdto.mustache";
@@ -37,6 +40,8 @@ public class GeneratesDtoProcessor extends AbstractProcessor {
     private static final String GET = "get";
     private static final String SET = "set";
     private static final String DTO = "Dto";
+
+    private static final String SEPERATOR = "\\.";
 
     public Mustache template;
 
@@ -107,11 +112,19 @@ public class GeneratesDtoProcessor extends AbstractProcessor {
     private void populateGettersAndSetters(TypeElement element, DtoGenModel model) {
         List<GenItem> genItems = new ArrayList<>();
         for (Element field : getEntityFields(element)) {
+            String specificDtoPackage = "";
+            String specificClassName = "";
             TypeMirror te = field.asType();
+            ReferencesDto refDto = field.getAnnotation(ReferencesDto.class);
+            if (refDto != null) {
+                specificDtoPackage = refDto.otherDto();
+                specificClassName = refDto.classNameAppend();
+            }
+
             genItems.add(new GenItem(field.getSimpleName().toString(),
                     applyGetterOrSetterMorph(field.getSimpleName().toString(), GET),
                     applyGetterOrSetterMorph(field.getSimpleName().toString(), SET),
-                    te.toString()));
+                    getFullPackageForReferencesDtoAnnotation(te.toString(), specificDtoPackage, specificClassName)));
         }
         model.setItems(genItems);
     }
@@ -130,5 +143,26 @@ public class GeneratesDtoProcessor extends AbstractProcessor {
                 .stream()
                 .filter(element -> element.getKind() == ElementKind.FIELD)
                 .collect(Collectors.toList());
+    }
+
+    private String getFullPackageForReferencesDtoAnnotation(String original, String addedDto, String append) {
+        if (StringUtil.isNonEmpty(addedDto)) {
+            if (addedDto.equals(ReferencesDto.PACKAGE_DEFAULT) && append.equals(ReferencesDto.CLASS_DEFAULT)) {
+                return original + append;
+            }
+            if (StringUtil.isNonEmpty(append)) {
+                return addedDto + "." + getClassOnly(original);
+            } else {
+                return addedDto + "." + getClassOnly(original) + append;
+            }
+        } else {
+            return original;
+        }
+    }
+
+    private String getClassOnly(String classAndPackage) {
+        String[] items = classAndPackage.split(SEPERATOR);
+        String classOnly = items[items.length-1];
+        return classOnly;
     }
 }

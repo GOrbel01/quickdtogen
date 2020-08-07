@@ -1,6 +1,8 @@
 package org.fsq.entity;
 
-import org.fsq.processor.GeneratesDto;
+import org.fsq.annotation.GeneratesDto;
+import org.fsq.annotation.ReferencesDto;
+import org.fsq.entity.alt.OtherEntity;
 
 import java.util.List;
 
@@ -11,6 +13,8 @@ public class TestEntity {
     private String randomFieldNameA;
     private TestField testField;
     private List<String> list;
+    @ReferencesDto
+    private OtherEntity otherEntity;
 
     public TestEntity() {
 
@@ -54,5 +58,13 @@ public class TestEntity {
 
     public void setList(List<String> list) {
         this.list = list;
+    }
+
+    public OtherEntity getOtherEntity() {
+        return otherEntity;
+    }
+
+    public void setOtherEntity(OtherEntity otherEntity) {
+        this.otherEntity = otherEntity;
     }
 }
