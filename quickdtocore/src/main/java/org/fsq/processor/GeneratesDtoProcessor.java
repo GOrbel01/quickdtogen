@@ -117,7 +117,7 @@ public class GeneratesDtoProcessor extends AbstractProcessor {
             TypeMirror te = field.asType();
             ReferencesDto refDto = field.getAnnotation(ReferencesDto.class);
             if (refDto != null) {
-                specificDtoPackage = refDto.otherDto();
+                specificDtoPackage = refDto.otherDtoPackage();
                 specificClassName = refDto.classNameAppend();
             }
 

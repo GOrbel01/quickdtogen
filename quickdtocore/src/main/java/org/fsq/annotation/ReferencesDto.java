@@ -17,7 +17,7 @@ public @interface ReferencesDto {
     String PACKAGE_DEFAULT = "-1";
     String CLASS_DEFAULT = "Dto";
 
-    String otherDto() default PACKAGE_DEFAULT;
+    String otherDtoPackage() default PACKAGE_DEFAULT;
     String classNameAppend() default CLASS_DEFAULT;
 
 }
